@@ -1,0 +1,10 @@
+langchain-community 
+faiss-cpu 
+langchain 
+langchain_huggingface 
+python-dotenv 
+pypdf 
+langchain_openai 
+streamlit
+asyncio
+playwright ### you need to install playwrit on local system, just this package is not enough. Use !playwright install in colab
