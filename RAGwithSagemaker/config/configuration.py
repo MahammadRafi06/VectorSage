@@ -14,6 +14,7 @@ class ConfigurationManager:
         self.params = read_yaml(params_file_path)
         self.schema = read_yaml(schema_file_path)
         self.envs = read_envfile(env_file_path_embeddings)  
+        print(self.envs)
         create_dir([self.config.artifacts_root])
         
     def get_sagemakersession_config(self)-> SagemakerSessionConfig:

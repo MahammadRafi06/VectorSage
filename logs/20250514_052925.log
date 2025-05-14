@@ -1,0 +1,7 @@
+2025-05-14 05:29:26,615, ragwithsagemaker, common.py, 19, read_yaml, INFO, config/config.yaml file loaded sucessfully
+2025-05-14 05:29:26,616, ragwithsagemaker, common.py, 19, read_yaml, INFO, params.yaml file loaded sucessfully
+2025-05-14 05:29:26,616, ragwithsagemaker, common.py, 19, read_yaml, INFO, schema.yaml file loaded sucessfully
+2025-05-14 05:29:26,617, ragwithsagemaker, common.py, 32, create_dir, INFO, Directory model created
+2025-05-14 05:29:26,617, ragwithsagemaker, embeddingmodel.py, 18, __init__, INFO, config received SagemakerSessionConfig(bucket='mlflowtrackingrafi', default_bucket_prefix='model', role='arn:aws:iam::703671901662:role/service-role/AmazonSageMaker-ExecutionRole-20250211T170358') EmbeddingsConfig(instance_type='ml.g5.4xlarge', model_version='*', model_id='huggingface-textembedding-gpt-j-6b-fp16', model_scope='inference', image_scope='inference', env={'SAGEMAKER_MODEL_SERVER_WORKERS': '1', 'TS_DEFAULT_WORKERS_PER_MODEL': '1'}, role='arn:aws:iam::703671901662:role/service-role/AmazonSageMaker-ExecutionRole-20250211T170358')
+2025-05-14 05:29:26,617, ragwithsagemaker, embeddingmodel.py, 26, __init__, INFO, config applied ml.g5.4xlarge * huggingface-textembedding-gpt-j-6b-fp16 
+                    inferenceinference{'SAGEMAKER_MODEL_SERVER_WORKERS': '1', 'TS_DEFAULT_WORKERS_PER_MODEL': '1'}arn:aws:iam::703671901662:role/service-role/AmazonSageMaker-ExecutionRole-20250211T170358

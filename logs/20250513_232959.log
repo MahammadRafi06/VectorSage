@@ -1,4 +1,0 @@
-2025-05-13 23:30:00,717, networksecurity, common.py, 19, read_yaml, INFO, config/config.yaml file loaded sucessfully
-2025-05-13 23:30:00,718, networksecurity, common.py, 19, read_yaml, INFO, params.yaml file loaded sucessfully
-2025-05-13 23:30:00,718, networksecurity, common.py, 19, read_yaml, INFO, schema.yaml file loaded sucessfully
-2025-05-13 23:30:00,718, networksecurity, common.py, 32, create_dir, INFO, Directory model created

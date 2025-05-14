@@ -44,4 +44,4 @@ def get_logger(name, log_dir = LOG_DIR, log_level = LOG_LEVEL):
     
     _logs.setLevel(log_level)
     return _logs
-logger = get_logger("networksecurity", log_dir = LOG_DIR, log_level = LOG_LEVEL)
+logger = get_logger("ragwithsagemaker", log_dir = LOG_DIR, log_level = LOG_LEVEL)
