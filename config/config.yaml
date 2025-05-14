@@ -1,0 +1,36 @@
+artifacts_root: model
+sagemaker:
+  role: "arn:aws:iam::703671901662:role/service-role/AmazonSageMaker-ExecutionRole-20250211T170358"
+  bucket: mlflowtrackingrafi
+  default_bucket_prefix: model
+embeddings:
+  instance_type: "ml.g5.4xlarge"
+  model_version: "*"
+  model_id: "huggingface-textembedding-gpt-j-6b-fp16"
+  model_scope: inference
+  image_scope: inference
+  role: "arn:aws:iam::703671901662:role/service-role/AmazonSageMaker-ExecutionRole-20250211T170358"
+
+textgenartion:
+  model_folder: str
+  servingproperties:
+    engine: MPI
+    option.model_id: tiiuae/falcon-7b-instruct
+    option.trust_remote_code: true
+    option.tensor_parallel_degree: 1
+    option.paged_attention: true
+    option.max_rolling_batch_size: 64
+    option.rolling_batch: lmi-dist
+    option.max_rolling_batch_prefill_tokens: 1560
+  model:
+    model_name:  falcon-7b-instruct
+    properties_file: tiiuae
+  image: 
+    framework: "djl-deepspeed"
+    version: "0.23.0"
+  instance_type:
+  base_name_endpoint: "lmi-model-falcon-7b"
+  s3_code_prefix: "large-model-lmi/code"
+s3: 
+  s3_code_prefix:
+  bucket: 
