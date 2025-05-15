@@ -27,8 +27,8 @@ def mongo_setup(embeddings, mongo_config):
     index_ = mongo_config.ATLAS_VECTOR_SEARCH_INDEX_NAME
     MONGODB_COLLECTION = client[db][collection]
     
-    existing_indexes = MONGODB_COLLECTION.index_information()
-    index_exists = any(index_ in idx for idx in existing_indexes)
+    existing_search_indexes = list(MONGODB_COLLECTION.aggregate([{"$listSearchIndexes": {}}]))
+    index_exists = any(index_ == i['name'] for i in existing_search_indexes)
     
     vector_store = MongoDBAtlasVectorSearch(
         collection=MONGODB_COLLECTION,

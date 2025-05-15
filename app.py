@@ -5,28 +5,36 @@ from RAGwithSagemaker.cloud.textgenerationmodel import DeployTextGenerationModel
 from RAGwithSagemaker.cloud.ragendpoints import RAGEndPoints
 from RAGwithSagemaker.cloud.vectorize_docs import vectorizedocs
 from RAGwithSagemaker.logging.logging import logger
+from RAGwithSagemaker.cloud.mongo_connecton import mongo_setup
 
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
-
 app = Flask(__name__)
+
 
 # Initialize the RAG pipeline
 logger.info("Setting up RAG pipeline...")
 
-config = ConfigurationManager()
-sagemaker_config = config.get_sagemakersession_config()
-embeddings_config = config.get_embeddings_config()
-textgeneration_config = config.get_textgeneration_config()
-rag_config = config.get_rag_config()
+congfiguration = ConfigurationManager()
+sagemaker_config = congfiguration.get_sagemakersession_config()
+embeddings_config = congfiguration.get_embeddings_config()
+textgeneration_config = congfiguration.get_textgeneration_config()
+s3_config = congfiguration.get_s3_config()
+rag_config = congfiguration.get_rag_config()
+mongo_config = congfiguration.get_mongo_config()
 
-DeployTextGenerationModel(sagemaker_config, textgeneration_config).creat_and_deploy_model()
-DeployEmbeddingModel(sagemaker_config, embeddings_config).deploy_embedding_model()
-embeddings_endpoint, sm_llm_endpoint = RAGEndPoints(rag_config).create_rag_endpoints()
-vector_store = vectorizedocs(embeddings_endpoint)
-retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+# text_model_deploy =DeployTextGenerationModel(sagemaker_config, textgeneration_config)
+# text_model_deploy.creat_and_deploy_model()
+
+# embedding_model_deploy = DeployEmbeddingModel(sagemaker_config,embeddings_config )
+# embedding_model_deploy.deploy_embedding_model()
+
+rag_endpoints = RAGEndPoints(rag_config)
+embeddings_endpoint, sm_llm_endpoint = rag_endpoints.create_rag_endpoints()
+
+retriever = mongo_setup(embeddings_endpoint, mongo_config)
 
 prompt = ChatPromptTemplate.from_template("""
 Role: You are an assistant with deep expertise in chemical compounds and their properties...
