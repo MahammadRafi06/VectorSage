@@ -6,7 +6,6 @@ pypdf
 langchain_openai 
 sagemaker
 boto3
-ipywidgets==7.0.0 
 langchain
 faiss-cpu
 unstructured

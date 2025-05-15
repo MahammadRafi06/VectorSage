@@ -3,7 +3,8 @@ from RAGwithSagemaker.utils.common import read_yaml, create_dir, read_envfile
 from RAGwithSagemaker.entity.config_entity import (SagemakerSessionConfig,
                                                    EmbeddingsConfig, 
                                                    TextgenartionConfig,
-                                                   S3Config
+                                                   S3Config,
+                                                   RagConfig
                                                    )
 import os 
 from pathlib import Path
@@ -35,7 +36,8 @@ class ConfigurationManager:
             model_scope = config.model_scope,
             image_scope= config.image_scope,
             env = self.envs,
-            role = config.role
+            role = config.role,
+            endpoint_name = self.params.rag.embedding.embed_endpoint_name
         )
         return embeddings_config
     
@@ -49,7 +51,8 @@ class ConfigurationManager:
             instance_type = config.instance_type,
             model_folder = config.model_folder,
             base_name_endpoint = config.base_name_endpoint,
-            s3_code_prefix = config.s3_code_prefix
+            s3_code_prefix = config.s3_code_prefix,
+            endpoint_name = self.params.rag.llm.llm_endpoint_name
         )
         return textgeneration_config
     
@@ -60,4 +63,15 @@ class ConfigurationManager:
             bucket = config.bucket,
         )
         return s3_config
+    
+    def get_rag_config(self) -> RagConfig:
+        config = self.params.rag
+        rag_config = RagConfig(
+            embed_endpoint_name = config.embedding.embed_endpoint_name,
+            llm_endpoint_name= config.llm.llm_endpoint_name,
+            parameters = config.llm.parameters,
+            region = config.region
+        )
+        return rag_config
+    
         

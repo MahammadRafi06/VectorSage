@@ -1,1 +1,10 @@
-key: val
+rag:
+  region: us-east-1
+  embedding: 
+    embed_endpoint_name: huggingface-textembedding-gpt-j-6b-fp16
+  llm:
+    llm_endpoint_name: Llama-2-7b-fp16
+    parameters: 
+      max_new_tokens: 500
+      return_full_text: False
+      temperature: 0.1

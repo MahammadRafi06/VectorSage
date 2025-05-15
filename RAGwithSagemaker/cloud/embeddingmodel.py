@@ -23,6 +23,7 @@ class DeployEmbeddingModel:
         self.image_scope= embd_config.image_scope
         self.env = embd_config.env
         self.role = embd_config.role
+        self.embed_endpoint_name = embd_config.endpoint_name
         logger.info(f"""config applied {self.instance_type} {self.model_version} {self.model_id} 
                     {self.model_scope}{self.image_scope}{self.env}{self.role}""")
     def deploy_embedding_model(self):
@@ -37,8 +38,9 @@ class DeployEmbeddingModel:
             model_id=model_id, model_version=model_version, model_scope= model_scope
         )
         logger.info(f"model_uri is : {model_uri}")
-        embed_endpoint_name = sagemaker.utils.name_from_base(model_id)
-        logger.info(f"end point name is : {embed_endpoint_name}")    
+        # embed_endpoint_name = sagemaker.utils.name_from_base(model_id)
+
+        logger.info(f"end point name is : {self.embed_endpoint_name}")    
         # Retrieve the inference container uri. This is the base HuggingFace container image for the default model above.
         deploy_image_uri = image_uris.retrieve(
             region=None,
@@ -63,8 +65,8 @@ class DeployEmbeddingModel:
             initial_instance_count=1,
             instance_type=instance_type,
             predictor_cls=Predictor,
-            endpoint_name=embed_endpoint_name,
-            wait=False,
+            endpoint_name=self.embed_endpoint_name,
+            wait=True,
         )
         print(f"Model {model_id} has been created successfully.")
 

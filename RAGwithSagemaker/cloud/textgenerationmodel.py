@@ -66,7 +66,7 @@ class DeployTextGenerationModel:
             role=role,
             name=falcon_model_name,)
         instance_type = self.txt_config.instance_type
-        endpoint_name = falcon_model_name
+        endpoint_name = self.txt_config.endpoint_name
         logger.info("model generated")
         model.deploy(
             initial_instance_count=1,
