@@ -39,14 +39,16 @@ class DeployTextGenerationModel:
             properties = self.txt_config.servingproperties
             for pro in properties.items():
                 p,v = pro
-                file.write(f"{p}={v} \n")
+                file.write(f"{p}={v}\n")
+        # with open(f"{model_folder}/requirements.txt", "w") as file:
+        #     file.write("lmi-dist")
         logger.info("Propteries file written to location")        
         archive_name = f"{model_folder}.tar.gz"
         subprocess.run(["tar", "czvf", archive_name, model_folder], check=True)
         subprocess.run(["rm", "-rf", model_folder], check=True)
         logger.info("Tar file generated")
-
         image_uri = image_uris.retrieve(framework=self.txt_config.image.framework, region=region, version=self.txt_config.image.version)
+        #image_uri="763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.23.0-deepspeed0.9.5-cu118"
         logger.info(f"image uri is : {image_uri}")
         s3_code_prefix = self.txt_config.s3_code_prefix
 
@@ -70,6 +72,6 @@ class DeployTextGenerationModel:
             initial_instance_count=1,
             instance_type=instance_type,
             endpoint_name=endpoint_name,
-            container_startup_health_check_timeout=900,
-            wait=False,
+            container_startup_health_check_timeout=600,
+            wait=True,
         )
