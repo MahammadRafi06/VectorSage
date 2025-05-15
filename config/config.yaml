@@ -11,6 +11,7 @@ embeddings:
   image_scope: inference
   role: "arn:aws:iam::703671901662:role/service-role/AmazonSageMaker-ExecutionRole-20250211T170358"
 
+
 textgenartion:
   model_folder: model
   servingproperties:
@@ -36,3 +37,7 @@ textgenartion:
 s3: 
   s3_code_prefix: model
   bucket: mlflowtrackingrafi
+aoss:
+  region: 'us-east-1'
+  host: 'yvi7ktac3durmnl69mc9.us-east-1.aoss.amazonaws.com'
+  service: 'aoss'

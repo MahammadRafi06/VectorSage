@@ -1,2 +1,3 @@
 logs/
 falcon-7b-instruct.tar.gz
+.env

@@ -8,3 +8,7 @@ rag:
       max_new_tokens: 500
       return_full_text: False
       temperature: 0.1
+mongo:
+  DB_NAME: "langchain_test_db"
+  COLLECTION_NAME: "langchain_test_vectorstores"
+  ATLAS_VECTOR_SEARCH_INDEX_NAME: "langchain-test-index-vectorstores"

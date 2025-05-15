@@ -19,3 +19,7 @@ Flask
 types-pyYAML
 Flask-Cors
 python-dotenv
+requests_aws4auth 
+opensearch-py
+pymongo
+langchain-mongodb
