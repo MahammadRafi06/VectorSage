@@ -46,6 +46,16 @@ class RagConfig:
     parameters: dict
     region: str  
 
+@dataclass
+class MongoConfig:
+    DB_NAME: str
+    COLLECTION_NAME: str
+    ATLAS_VECTOR_SEARCH_INDEX_NAME: str
+    datafolder: Path
+    embedding_dimenssion: int
+    k: int
+    score: float
+
 
 class SagemakerEndpointEmbeddingsJumpStart(SagemakerEndpointEmbeddings):
     def embed_documents(self, texts: List[str], chunk_size: int = 5) -> List[List[float]]:

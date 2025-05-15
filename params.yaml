@@ -12,3 +12,7 @@ mongo:
   DB_NAME: "langchain_test_db"
   COLLECTION_NAME: "langchain_test_vectorstores"
   ATLAS_VECTOR_SEARCH_INDEX_NAME: "langchain-test-index-vectorstores"
+  datafolder: "RAGwithSagemaker/data"
+  embedding_dimenssion: 4096
+  k: 2
+  score: .2

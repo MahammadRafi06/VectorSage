@@ -4,7 +4,8 @@ from RAGwithSagemaker.entity.config_entity import (SagemakerSessionConfig,
                                                    EmbeddingsConfig, 
                                                    TextgenartionConfig,
                                                    S3Config,
-                                                   RagConfig
+                                                   RagConfig,
+                                                   MongoConfig
                                                    )
 import os 
 from pathlib import Path
@@ -73,5 +74,17 @@ class ConfigurationManager:
             region = config.region
         )
         return rag_config
+    def get_mongo_config(self)->MongoConfig:
+        config = self.params.mongo
+        mongo_config = MongoConfig(
+            DB_NAME = config.DB_NAME,
+            COLLECTION_NAME = config.COLLECTION_NAME,
+            ATLAS_VECTOR_SEARCH_INDEX_NAME = config.ATLAS_VECTOR_SEARCH_INDEX_NAME,
+            datafolder = config.datafolder,
+            embedding_dimenssion = config.embedding_dimenssion,
+            k = config.k,
+            score = config.score 
+        )
+        return mongo_config
     
         
