@@ -1,108 +1,142 @@
-# "PharmaSight: AI-Powered Drug Reaction Insights"
+Markdown
 
-# Human Drug Adverse Reactions Analysis and Reporting
+# RAGwithSagemaker
 
-## Project Overview
+## Overview
 
-This project aims to analyze human drug adverse reactions by leveraging various data processing, extraction, and machine learning tools. The data is sourced from OpenFDA and PubChem, processed in Azure Databricks using PySpark and Spark SQL, and ultimately used to build an AI-powered application using LangChain, FAISS, and GPT-4. The final output includes both structured data in the form of Lighthouse Architecture and unstructured reports saved as PDFs.
+This project demonstrates a Retrieval Augmented Generation (RAG) pipeline implemented using SageMaker. It leverages external data sources (OpenFDA and PubChem - based on previous context), a SageMaker-deployed embedding model (likely a HuggingFace model), a SageMaker-deployed Large Language Model (LLM) (Llama 2), and MongoDB Atlas for vector storage. The application is likely served using Flask or Streamlit.
 
-## Project Workflow
+This repository contains the necessary code and configurations to build and deploy this RAG system on AWS SageMaker.
 
-### 1. Data Extraction
-- **Source**: OpenFDA (for drug adverse reactions data)
-- **Tool Used**: Azure Data Factory
-  - **Config File**: A deeply nested JSON containing URLs to downloadable files.
-  - **Activities**: 
-    - **Lookup Activity**: Extracted the URLs from the JSON file.
-    - **ForEach Activity**: Iterated over the URLs to download the data.
-    - **Copy Activity**: Used HTML connectors to download the data files.
+## Project Structure
 
-### 2. Data Processing
-- **Platform**: Azure Databricks
-- **Tools**: PySpark and Spark SQL
-- **Data Structure**: The downloaded files contained deeply nested data.
-- **Processing**: Cleaned and transformed the data into a structured format following the Lighthouse Architecture.
+RAGwithSagemaker/
+├── init.py
+├── cloud/
+│   └── init.py
+├── components/
+│   └── init.py
+├── config/
+│   ├── init.py
+│   ├── config.yaml
+│   └── configuration.py
+├── constants/
+│   └── init.py
+├── entity/
+│   ├── init.py
+│   └── config_entity.py
+├── exception/
+│   └── init.py
+├── logging/
+│   └── init.py
+├── pipeline/
+│   └── init.py
+├── utils/
+│   ├── init.py
+│   └── common.py
+Data/
+├── init.py
+.github/workflows/
+│   └── .gitkeep
+Dockerfile
+main.py
+params.yaml
+requirements.txt
+research/
+│   └── research.ipynb
+schema.yaml
+setup.py
+config/
+└── config.yaml
 
-### 3. Reporting
-- **Tool Used**: Azure SQL Data Studio
-- **Reports**: Generated unstructured reports from the processed data.
-- **Output**: Saved the reports as PDFs.
 
-### 4. Chemical Compounds Data Extraction
-- **Source**: PubChem
-- **Tools Used**: 
-  - **Playwright**: For browser automation.
-  - **Asyncio**: For handling asynchronous tasks.
-- **Data**: Programmatically downloaded chemical compound properties data.
+**Key Files and Directories:**
 
-### 5. Application Development
-- **Framework**: Streamlit
-- **AI Integration**:
-  - **LangChain**: For building a language model application.
-  - **Huggingface Embeddings**: For creating text embeddings.
-  - **FAISS Vector Store**: For efficient similarity search.
-  - **OpenAI GPT-4**: For natural language understanding and generation.
-  - **Chat Prompts & Retrievers**: For effective interaction with the AI model.
-- **Output**: An interactive AI-powered app that analyzes and provides insights based on the processed data.
+* `RAGwithSagemaker/`: Contains the main project code organized into modules for components, configuration, pipelines, entities, utilities, cloud interactions, exceptions, and logging.
+* `RAGwithSagemaker/config/`: Holds configuration files (`config.yaml`) and the configuration management logic (`configuration.py`).
+* `RAGwithSagemaker/pipeline/`: Likely contains the implementation of the RAG pipeline stages.
+* `RAGwithSagemaker/entity/`: Defines data structures and configuration entities.
+* `RAGwithSagemaker/utils/`: Includes common utility functions (`common.py`).
+* `Data/`: Intended for storing project-related data.
+* `.github/workflows/`: Contains CI/CD workflow definitions (currently `.gitkeep`).
+* `Dockerfile`: Defines the Docker image for the application.
+* `main.py`: The main entry point for the application.
+* `params.yaml`: Stores parameters used in the project.
+* `requirements.txt`: Lists the Python dependencies.
+* `research/research.ipynb`: A Jupyter Notebook likely used for experimentation and research.
+* `schema.yaml`: Defines the schema for data or configurations.
+* `setup.py`: Used for packaging and installing the project.
+* `config/config.yaml`: Another configuration file (likely a duplicate or for specific configurations).
 
 ## Installation
 
-### Prerequisites
-- Python 3.8+
-- Azure Subscription (for Azure Data Factory, Azure Databricks, Azure SQL Data Studio)
-- Streamlit
-- LangChain, FAISS, Huggingface, OpenAI Python libraries
-
-### Setup
-
-1. **Clone the Repository**
+1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/MahammadRafi06/Drug-Reaction-Trends-and-Insights-with-AI
+    git clone <repository_url>
+    cd RAGwithSagemaker
     ```
 
-2. **Install Python Dependencies**
+2.  **Create a virtual environment (recommended):**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Linux/macOS
+    .\venv\Scripts\activate  # On Windows
+    ```
+
+3.  **Install the dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-3. **Set Up Azure Data Factory**
-   - Configure the Data Factory pipeline with the provided JSON configuration file.
+4.  **Configure Environment Variables:**
+    Create a `.env` file (if needed) in the project root and define any necessary environment variables (e.g., MongoDB connection string, SageMaker endpoint names, API keys). You might need to refer to the `config/configuration.py` or other parts of the codebase to identify the required environment variables.
 
-4. **Set Up Azure Databricks**
-   - Import the PySpark and Spark SQL scripts to process the data.
+## Configuration
 
-4. **Download PDF Files and Create Unstructured(pdf) reports**
-   - Run python scripts.
+The project uses YAML configuration files (`config/config.yaml` and `params.yaml`) for managing settings. Update these files as needed for your specific setup, such as data paths, model parameters, and SageMaker endpoint configurations.
 
-6. **Run the Streamlit App**
-    ```bash
-    streamlit run app.py
-    ```
+## Running the Application
 
-## Usage
+The `main.py` file likely serves as the entry point for running the application. You can execute it using:
 
-1. **Data Extraction**: Run the Azure Data Factory pipeline to download the data.
-2. **Data Processing**: Use the PySpark scripts in Azure Databricks to clean and structure the data.
-3. **Reporting**: Generate reports using Azure SQL Data Studio and save them as PDFs.
-4. **Chemical Data Extraction**: Run the Python scripts to download chemical properties from PubChem.
-5. **Application**: Use the Streamlit app to interact with the AI model and retrieve insights based on the data.
+```bash
+python main.py
+Refer to the code within main.py to understand the specific execution steps and any command-line arguments it might accept.
 
-## Project Structure
+Deployment to SageMaker
+The project is designed to leverage SageMaker for deploying the embedding model and the LLM. The deployment process likely involves:
 
-```plaintext
-├── data/                    # a subset of raw data files used
-├── python_scripts/          # .py files to download pdf fiels from PubChem
-├── Sql_files/               # Databricks and Azure SQL scripts for data processing and extraction
-├── app.py                   # Streamlit application code
-├── README.md                # Project documentation
-└── requirements.txt         # Python dependencies
+Creating SageMaker Endpoints: Using the AWS SageMaker SDK or console to deploy the pre-trained embedding model (e.g., from HuggingFace) and the Llama 2 model.
+Configuring Endpoint Names: Ensuring that the SageMaker endpoint names are correctly configured in the project's configuration files (config.yaml or params.yaml) or environment variables.
+Building and Pushing Docker Image (if necessary): If custom inference logic is required, a Docker image containing the necessary dependencies and code needs to be built and pushed to Amazon ECR.
+Refer to the code in RAGwithSagemaker/cloud/ (if it exists) and the configuration files for details on SageMaker deployment.
+
+Data Ingestion and Processing
+The RAG pipeline ingests data from OpenFDA and PubChem (based on previous context). The data ingestion and processing logic would be implemented within the RAGwithSagemaker/pipeline/ or RAGwithSagemaker/components/ directories. This likely involves:
+
+Downloading data from the sources.
+Preprocessing and cleaning the data.
+Generating vector embeddings using the deployed SageMaker embedding model.
+Storing the embeddings in MongoDB Atlas.
+RAG Pipeline
+The core RAG pipeline likely resides in the RAGwithSagemaker/pipeline/ directory. It orchestrates the following steps:
+
+Receiving user queries from the Flask/Streamlit application.
+Retrieving relevant vector embeddings from MongoDB Atlas based on the query.
+Formulating a prompt for the SageMaker-deployed LLM, including the retrieved context and the user query.
+Receiving the generated response from the LLM.
+Returning the response to the user interface.
+Contributing
+Contributions to this project are welcome. Please follow these steps:
+
+Fork the repository.
+Create a new branch for your feature or bug fix.
+Make your changes and commit them.
+Push your changes to your fork.
+Submit a pull request.
 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+[Specify the license under which the project is distributed]
 
-Acknowledgements
-OpenFDA for providing the drug adverse reactions data.
-PubChem for chemical compounds data.
-Azure for cloud computing resources.
-LangChain for the AI integration tools.
-Streamlit for the web application framework.
-OpenAI for providing the GPT-4 model.
+Contact
+[Your Name/Organization]
+[Your Email/Contact Information]
