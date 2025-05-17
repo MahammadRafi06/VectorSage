@@ -222,7 +222,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Contact
 
-Your Name - [@MahammadRafi] - mrafi@uw.edu
+MahammadRafi - mrafi@uw.edu
 
 Project Link: [https://github.com/yourusername/RAGwithSagemaker](https://github.com/yourusername/RAGwithSagemaker)
 
