@@ -1,6 +1,6 @@
 # VectorSage for Financial Data
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/VectorSage?style=social)
+![GitHub stars](https://img.shields.io/github/stars/MahammadRafi06/VectorSage?style=social)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10-blue)
 
@@ -37,7 +37,7 @@ This project implements a complete RAG pipeline for intelligent document retriev
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/VectorSage.git
+git clone https://github.com/MahammadRafi06/VectorSage.git
 cd VectorSage
 ```
 
@@ -226,7 +226,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 MahammadRafi - mrafi@uw.edu
 
-Project Link: [https://github.com/yourusername/VectorSage](https://github.com/yourusername/VectorSage)
+Project Link: [https://github.com/MahammadRafi06/VectorSage](https://github.com/MahammadRafi06/VectorSage)
 
 ## 🙏 Acknowledgements
 
