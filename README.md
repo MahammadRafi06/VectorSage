@@ -1,142 +1,235 @@
-Markdown
+# AWS SageMaker RAG Pipeline: Intelligent Document Retrieval System
 
-# RAGwithSagemaker
+![GitHub stars](https://img.shields.io/github/stars/yourusername/RAGwithSagemaker?style=social)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10-blue)
 
-## Overview
+A production-ready Retrieval Augmented Generation (RAG) system built on AWS SageMaker that integrates with MongoDB Atlas for vector storage. This system demonstrates how to deploy large language models and embedding models on SageMaker, store and retrieve vector embeddings in MongoDB Atlas, and build both Flask and Streamlit interfaces for user interaction.
 
-This project demonstrates a Retrieval Augmented Generation (RAG) pipeline implemented using SageMaker. It leverages external data sources (OpenFDA and PubChem - based on previous context), a SageMaker-deployed embedding model (likely a HuggingFace model), a SageMaker-deployed Large Language Model (LLM) (Llama 2), and MongoDB Atlas for vector storage. The application is likely served using Flask or Streamlit.
+## 🔍 Project Overview
 
-This repository contains the necessary code and configurations to build and deploy this RAG system on AWS SageMaker.
+This project implements a complete RAG pipeline for intelligent document retrieval and question answering:
 
-## Project Structure
+- **Text Embedding**: Uses Hugging Face's GPT-J-6B model on SageMaker to generate embeddings
+- **Vector Storage**: Stores and retrieves document embeddings in MongoDB Atlas
+- **Text Generation**: Uses Llama-2-7b model on SageMaker for context-aware text generation
+- **Web Interfaces**: Provides both Flask and Streamlit UIs for user interaction
 
-RAGwithSagemaker/
-├── init.py
-├── cloud/
-│   └── init.py
-├── components/
-│   └── init.py
-├── config/
-│   ├── init.py
-│   ├── config.yaml
-│   └── configuration.py
-├── constants/
-│   └── init.py
-├── entity/
-│   ├── init.py
-│   └── config_entity.py
-├── exception/
-│   └── init.py
-├── logging/
-│   └── init.py
-├── pipeline/
-│   └── init.py
-├── utils/
-│   ├── init.py
-│   └── common.py
-Data/
-├── init.py
-.github/workflows/
-│   └── .gitkeep
-Dockerfile
-main.py
-params.yaml
-requirements.txt
-research/
-│   └── research.ipynb
-schema.yaml
-setup.py
-config/
-└── config.yaml
+![Architecture Diagram](docs/images/architecture_diagram.png)
 
+## 🚀 Features
 
-**Key Files and Directories:**
+- **Fully Managed AWS Infrastructure**: Leverages SageMaker for model deployment and management
+- **Scalable Vector Search**: MongoDB Atlas vector search provides efficient similarity retrieval
+- **Configurable RAG Pipeline**: Easily adjust parameters for retrieval and generation
+- **LangChain Integration**: Uses the LangChain framework for composable RAG components
+- **Dual User Interfaces**: Choose between API-focused Flask or data-focused Streamlit
+- **Production-Ready Structure**: Follows software engineering best practices with modular design
 
-* `RAGwithSagemaker/`: Contains the main project code organized into modules for components, configuration, pipelines, entities, utilities, cloud interactions, exceptions, and logging.
-* `RAGwithSagemaker/config/`: Holds configuration files (`config.yaml`) and the configuration management logic (`configuration.py`).
-* `RAGwithSagemaker/pipeline/`: Likely contains the implementation of the RAG pipeline stages.
-* `RAGwithSagemaker/entity/`: Defines data structures and configuration entities.
-* `RAGwithSagemaker/utils/`: Includes common utility functions (`common.py`).
-* `Data/`: Intended for storing project-related data.
-* `.github/workflows/`: Contains CI/CD workflow definitions (currently `.gitkeep`).
-* `Dockerfile`: Defines the Docker image for the application.
-* `main.py`: The main entry point for the application.
-* `params.yaml`: Stores parameters used in the project.
-* `requirements.txt`: Lists the Python dependencies.
-* `research/research.ipynb`: A Jupyter Notebook likely used for experimentation and research.
-* `schema.yaml`: Defines the schema for data or configurations.
-* `setup.py`: Used for packaging and installing the project.
-* `config/config.yaml`: Another configuration file (likely a duplicate or for specific configurations).
+## 📋 Prerequisites
 
-## Installation
+- AWS Account with SageMaker access
+- MongoDB Atlas account (free tier works for testing)
+- Python 3.9+
+- AWS CLI configured with appropriate permissions
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository_url>
-    cd RAGwithSagemaker
-    ```
+## 🔧 Installation
 
-2.  **Create a virtual environment (recommended):**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Linux/macOS
-    .\venv\Scripts\activate  # On Windows
-    ```
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/RAGwithSagemaker.git
+cd RAGwithSagemaker
+```
 
-3.  **Install the dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+2. Create and activate a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-4.  **Configure Environment Variables:**
-    Create a `.env` file (if needed) in the project root and define any necessary environment variables (e.g., MongoDB connection string, SageMaker endpoint names, API keys). You might need to refer to the `config/configuration.py` or other parts of the codebase to identify the required environment variables.
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-## Configuration
+4. Set up your environment variables:
+```bash
+cp .env.example embedding.env
+# Edit embedding.env with your MongoDB Atlas connection string and AWS credentials
+```
 
-The project uses YAML configuration files (`config/config.yaml` and `params.yaml`) for managing settings. Update these files as needed for your specific setup, such as data paths, model parameters, and SageMaker endpoint configurations.
+## ⚙️ Configuration
 
-## Running the Application
+The project uses YAML configuration files to manage settings:
 
-The `main.py` file likely serves as the entry point for running the application. You can execute it using:
+- `config/config.yaml`: Main configuration for AWS services
+- `params.yaml`: Model parameters and RAG configuration
+- `schema.yaml`: Data schemas (if needed)
+
+Example MongoDB configuration in `params.yaml`:
+```yaml
+mongo:
+  DB_NAME: "langchain_test_db"
+  COLLECTION_NAME: "langchain_test_vectorstores"
+  ATLAS_VECTOR_SEARCH_INDEX_NAME: "langchain-test-index-vectorstores"
+  datafolder: "RAGwithSagemaker/data"
+  embedding_dimenssion: 4096
+  k: 2
+  score: .2
+```
+
+## 🏃‍♂️ Running the Application
+
+### Deploy Models to SageMaker
+
+First, deploy the necessary models to SageMaker:
 
 ```bash
 python main.py
-Refer to the code within main.py to understand the specific execution steps and any command-line arguments it might accept.
+```
 
-Deployment to SageMaker
-The project is designed to leverage SageMaker for deploying the embedding model and the LLM. The deployment process likely involves:
+This script will:
+1. Set up the project structure
+2. Deploy the embedding model (GPT-J-6B)
+3. Deploy the text generation model (Llama-2-7b)
+4. Create and configure the MongoDB vector store
+5. Initialize the RAG pipeline
 
-Creating SageMaker Endpoints: Using the AWS SageMaker SDK or console to deploy the pre-trained embedding model (e.g., from HuggingFace) and the Llama 2 model.
-Configuring Endpoint Names: Ensuring that the SageMaker endpoint names are correctly configured in the project's configuration files (config.yaml or params.yaml) or environment variables.
-Building and Pushing Docker Image (if necessary): If custom inference logic is required, a Docker image containing the necessary dependencies and code needs to be built and pushed to Amazon ECR.
-Refer to the code in RAGwithSagemaker/cloud/ (if it exists) and the configuration files for details on SageMaker deployment.
+### Run the Flask Web App
 
-Data Ingestion and Processing
-The RAG pipeline ingests data from OpenFDA and PubChem (based on previous context). The data ingestion and processing logic would be implemented within the RAGwithSagemaker/pipeline/ or RAGwithSagemaker/components/ directories. This likely involves:
+```bash
+python app.py
+```
 
-Downloading data from the sources.
-Preprocessing and cleaning the data.
-Generating vector embeddings using the deployed SageMaker embedding model.
-Storing the embeddings in MongoDB Atlas.
-RAG Pipeline
-The core RAG pipeline likely resides in the RAGwithSagemaker/pipeline/ directory. It orchestrates the following steps:
+The Flask application will be available at http://localhost:5000
 
-Receiving user queries from the Flask/Streamlit application.
-Retrieving relevant vector embeddings from MongoDB Atlas based on the query.
-Formulating a prompt for the SageMaker-deployed LLM, including the retrieved context and the user query.
-Receiving the generated response from the LLM.
-Returning the response to the user interface.
-Contributing
-Contributions to this project are welcome. Please follow these steps:
+### Run the Streamlit Interface
 
-Fork the repository.
-Create a new branch for your feature or bug fix.
-Make your changes and commit them.
-Push your changes to your fork.
-Submit a pull request.
-License
-[Specify the license under which the project is distributed]
+```bash
+cd RAGwithSagemaker
+streamlit run main.py
+```
 
-Contact
-[Your Name/Organization]
-[Your Email/Contact Information]
+The Streamlit application will be available at http://localhost:8501
+
+## 📁 Project Structure
+
+```
+RAGwithSagemaker/
+├── .github/               # GitHub workflows and actions
+├── config/                # Configuration files
+│   └── config.yaml        # Main AWS configuration
+├── Data/                  # Data storage directory
+├── research/              # Research notebooks
+├── RAGwithSagemaker/      # Main module
+│   ├── cloud/             # AWS and MongoDB integration
+│   ├── components/        # Reusable components
+│   ├── config/            # Configuration management
+│   ├── constants/         # Project constants
+│   ├── entity/            # Data classes and models
+│   ├── logging/           # Logging setup
+│   ├── utils/             # Utility functions
+│   └── __init__.py        # Package initialization
+├── app.py                 # Flask application
+├── main.py                # Main entry script
+├── params.yaml            # Model and RAG parameters
+├── requirements.txt       # Project dependencies
+├── schema.yaml            # Data schemas
+└── setup.py               # Package setup file
+```
+
+## 🧩 Core Components
+
+### 1. Embedding Model
+
+The system uses Hugging Face's GPT-J-6B model for generating text embeddings. This model is deployed on an ml.g5.4xlarge instance in SageMaker.
+
+```python
+embedding_model_deploy = DeployEmbeddingModel(sagemaker_config, embeddings_config)
+embedding_model_deploy.deploy_embedding_model()
+```
+
+### 2. Text Generation Model
+
+For text generation, we use the Llama-2-7b-fp16 model deployed on an ml.g5.12xlarge instance:
+
+```python
+text_model_deploy = DeployTextGenerationModel(sagemaker_config, textgeneration_config)
+text_model_deploy.creat_and_deploy_model()
+```
+
+### 3. MongoDB Vector Store
+
+Documents are embedded and stored in MongoDB Atlas:
+
+```python
+retriever = mongo_setup(embeddings_endpoint, mongo_config)
+```
+
+### 4. RAG Pipeline
+
+The RAG pipeline uses LangChain to connect the embedded query with relevant documents and the LLM:
+
+```python
+prompt = ChatPromptTemplate.from_template("""
+Role: You are my assistant, please help me with responses based on context
+<context>
+{context}
+</context>
+Question: {input}""")
+
+document_chain = create_stuff_documents_chain(sm_llm_endpoint, prompt)
+retrieval_chain = create_retrieval_chain(retriever, document_chain)
+```
+
+## 📚 Use Cases
+
+The system is particularly well-suited for:
+
+- **Domain-specific QA systems**: Build knowledge bases from specialized documents
+- **Drug and chemical information retrieval**: The demonstration includes a drug reaction trends analysis
+- **Corporate document search**: Query internal documentation with natural language
+- **Research assistance**: Find relevant information across large document collections
+
+## 🔄 Workflow
+
+1. Documents are loaded from PDF files
+2. Text is split into chunks and embedded using the SageMaker embedding endpoint
+3. Embeddings are stored in MongoDB Atlas
+4. User queries are embedded using the same model
+5. Similar documents are retrieved from MongoDB using vector similarity
+6. The LLM generates a context-aware response using the original query and retrieved documents
+
+## 🔐 Security
+
+- IAM roles are used for secure AWS service access
+- MongoDB connection string should be stored as an environment variable
+- SageMaker endpoints are protected by AWS authentication
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📞 Contact
+
+Your Name - [@yourusername](https://twitter.com/yourusername) - email@example.com
+
+Project Link: [https://github.com/yourusername/RAGwithSagemaker](https://github.com/yourusername/RAGwithSagemaker)
+
+## 🙏 Acknowledgements
+
+- [LangChain](https://github.com/hwchase17/langchain)
+- [MongoDB Atlas](https://www.mongodb.com/atlas/database)
+- [AWS SageMaker](https://aws.amazon.com/sagemaker/)
+- [Hugging Face](https://huggingface.co/)
+- [Meta AI (for Llama-2)](https://ai.meta.com/)
