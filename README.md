@@ -1,6 +1,6 @@
-# AWS SageMaker RAG Pipeline: Intelligent Document Retrieval System
+# VectorSage for Financial Data
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/RAGwithSagemaker?style=social)
+![GitHub stars](https://img.shields.io/github/stars/yourusername/VectorSage?style=social)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10-blue)
 
@@ -37,8 +37,8 @@ This project implements a complete RAG pipeline for intelligent document retriev
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/RAGwithSagemaker.git
-cd RAGwithSagemaker
+git clone https://github.com/yourusername/VectorSage.git
+cd VectorSage
 ```
 
 2. Create and activate a virtual environment:
@@ -72,7 +72,7 @@ mongo:
   DB_NAME: "langchain_test_db"
   COLLECTION_NAME: "langchain_test_vectorstores"
   ATLAS_VECTOR_SEARCH_INDEX_NAME: "langchain-test-index-vectorstores"
-  datafolder: "RAGwithSagemaker/data"
+  datafolder: "VectorSage/data"
   embedding_dimenssion: 4096
   k: 2
   score: .2
@@ -106,7 +106,7 @@ The Flask application will be available at http://localhost:5000
 ### Run the Streamlit Interface
 
 ```bash
-cd RAGwithSagemaker
+cd VectorSage
 streamlit run main.py
 ```
 
@@ -115,13 +115,13 @@ The Streamlit application will be available at http://localhost:8501
 ## 📁 Project Structure
 
 ```
-RAGwithSagemaker/
+VectorSage/
 ├── .github/               # GitHub workflows and actions
 ├── config/                # Configuration files
 │   └── config.yaml        # Main AWS configuration
 ├── Data/                  # Data storage directory
 ├── research/              # Research notebooks
-├── RAGwithSagemaker/      # Main module
+├── VectorSage/      # Main module
 │   ├── cloud/             # AWS and MongoDB integration
 │   ├── components/        # Reusable components
 │   ├── config/            # Configuration management
@@ -226,7 +226,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 MahammadRafi - mrafi@uw.edu
 
-Project Link: [https://github.com/yourusername/RAGwithSagemaker](https://github.com/yourusername/RAGwithSagemaker)
+Project Link: [https://github.com/yourusername/VectorSage](https://github.com/yourusername/VectorSage)
 
 ## 🙏 Acknowledgements
 
