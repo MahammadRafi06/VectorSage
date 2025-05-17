@@ -137,8 +137,10 @@ RAGwithSagemaker/
 ├── schema.yaml            # Data schemas
 └── setup.py               # Package setup file
 ```
+![Architecture Diagram](docs/images/architecture_diagram.png)
+![Architecture Diagram](docs/images/config.png)
 
-## 🧩 Core Components
+## 🧩 Core ComponentsC
 
 ### 1. Embedding Model
 
