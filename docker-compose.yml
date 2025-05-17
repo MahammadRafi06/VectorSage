@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    env_file:
+      - embedding.env
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME:-admin}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD:-password}
+
+  streamlit:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: streamlit run RAGwithSagemaker/main.py
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    env_file:
+      - embedding.env
+    depends_on:
+      - web
+      - mongodb
+
+volumes:
+  mongodb_data: 
