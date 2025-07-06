@@ -1,237 +1,433 @@
-# VectorSage for Financial Data
+# VectorSage: Production-Ready RAG System on AWS SageMaker
 
-![GitHub stars](https://img.shields.io/github/stars/MahammadRafi06/VectorSage?style=social)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10-blue)
+A comprehensive Retrieval-Augmented Generation (RAG) platform built on AWS SageMaker with MongoDB Atlas integration, designed for enterprise-scale document intelligence and question answering.
 
-A production-ready Retrieval Augmented Generation (RAG) system built on AWS SageMaker that integrates with MongoDB Atlas for vector storage. This system demonstrates how to deploy large language models and embedding models on SageMaker, store and retrieve vector embeddings in MongoDB Atlas, and build both Flask and Streamlit interfaces for user interaction.
+## Overview
 
-## 🔍 Project Overview
+VectorSage demonstrates a complete production-ready RAG implementation that leverages AWS SageMaker for model deployment, MongoDB Atlas for vector storage, and LangChain for orchestration. The system provides both Flask and Streamlit interfaces for versatile user interaction while maintaining enterprise-grade scalability and security.
 
-This project implements a complete RAG pipeline for intelligent document retrieval and question answering:
+## Key Features
 
-- **Text Embedding**: Uses Hugging Face's GPT-J-6B model on SageMaker to generate embeddings
-- **Vector Storage**: Stores and retrieves document embeddings in MongoDB Atlas
-- **Text Generation**: Uses Llama-2-7b model on SageMaker for context-aware text generation
-- **Web Interfaces**: Provides both Flask and Streamlit UIs for user interaction
+- **Enterprise-Grade Infrastructure**: Full AWS SageMaker integration with managed endpoints
+- **Scalable Vector Storage**: MongoDB Atlas vector search with optimized indexing
+- **Dual Model Deployment**: Separate embedding and text generation endpoints
+- **Multi-Interface Support**: Both Flask API and Streamlit web interface
+- **Production-Ready Architecture**: Comprehensive logging, monitoring, and error handling
+- **Docker & Kubernetes Ready**: Complete containerization and orchestration support
+- **Configurable Pipeline**: YAML-based configuration for different environments
 
-![Architecture Diagram](docs/images/architecture_diagram.png)
+## Architecture Overview
 
-## 🚀 Features
+```
+Documents → Embedding Model → Vector Store → Retrieval → LLM → Response
+    ↓           ↓               ↓           ↓         ↓       ↓
+  PDF Files  SageMaker      MongoDB    LangChain  SageMaker  User
+            (GPT-J-6B)     Atlas      Framework  (Llama-2)  Interface
+```
 
-- **Fully Managed AWS Infrastructure**: Leverages SageMaker for model deployment and management
-- **Scalable Vector Search**: MongoDB Atlas vector search provides efficient similarity retrieval
-- **Configurable RAG Pipeline**: Easily adjust parameters for retrieval and generation
-- **LangChain Integration**: Uses the LangChain framework for composable RAG components
-- **Dual User Interfaces**: Choose between API-focused Flask or data-focused Streamlit
-- **Production-Ready Structure**: Follows software engineering best practices with modular design
+## System Components
 
-## 📋 Prerequisites
+### 1. Embedding Pipeline
+- **Model**: Hugging Face GPT-J-6B (4096 dimensions)
+- **Instance**: ml.g5.4xlarge SageMaker endpoint
+- **Processing**: Document chunking and vectorization
+- **Storage**: MongoDB Atlas vector collections
+
+### 2. Text Generation Pipeline
+- **Model**: Llama-2-7b-fp16
+- **Instance**: ml.g5.12xlarge SageMaker endpoint
+- **Configuration**: Optimized for context-aware generation
+- **Integration**: LangChain document chain orchestration
+
+### 3. Vector Search System
+- **Database**: MongoDB Atlas with vector search capabilities
+- **Index**: Optimized for 4096-dimensional embeddings
+- **Similarity**: Cosine similarity with configurable thresholds
+- **Performance**: Sub-second retrieval for production workloads
+
+## Project Structure
+
+```
+VectorSage/
+├── VectorSage/                 # Main package
+│   ├── cloud/                  # AWS and MongoDB integration
+│   │   ├── embeddingmodel.py   # SageMaker embedding deployment
+│   │   ├── textgenerationmodel.py # SageMaker LLM deployment
+│   │   ├── ragendpoints.py     # Endpoint management
+│   │   ├── vectorize_docs.py   # Document processing
+│   │   └── mongo_connecton.py  # MongoDB Atlas integration
+│   ├── config/                 # Configuration management
+│   │   └── configuration.py    # YAML-based configuration
+│   ├── entity/                 # Data entities and models
+│   │   └── config_entity.py    # Configuration classes
+│   ├── logging/                # Logging infrastructure
+│   │   └── logger.py           # Structured logging
+│   └── utils/                  # Utility functions
+│       └── common.py           # Common utilities
+├── config/
+│   └── config.yaml             # Main configuration
+├── data/                       # Document storage
+├── templates/                  # HTML templates
+├── static/                     # Static web assets
+├── app.py                      # Flask application
+├── main.py                     # Main entry point
+├── docker-compose.yml          # Multi-container setup
+├── Dockerfile                  # Container configuration
+├── params.yaml                 # Model parameters
+└── requirements.txt            # Dependencies
+```
+
+## Installation
+
+### Prerequisites
 
 - AWS Account with SageMaker access
-- MongoDB Atlas account (free tier works for testing)
+- MongoDB Atlas account
 - Python 3.9+
-- AWS CLI configured with appropriate permissions
+- Docker (optional)
+- AWS CLI configured
 
-## 🔧 Installation
+### Setup Instructions
 
-1. Clone the repository:
-```bash
-git clone https://github.com/MahammadRafi06/VectorSage.git
-cd VectorSage
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/MahammadRafi06/VectorSage.git
+   cd VectorSage
+   ```
 
-2. Create and activate a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+2. **Create virtual environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. Set up your environment variables:
-```bash
-cp .env.example embedding.env
-# Edit embedding.env with your MongoDB Atlas connection string and AWS credentials
-```
+4. **Configure environment:**
+   ```bash
+   cp embedding.env.example embedding.env
+   # Edit embedding.env with your credentials
+   ```
 
-## ⚙️ Configuration
+   Required environment variables:
+   ```env
+   MONGODB_ATLAS_CLUSTER_URI=mongodb+srv://username:password@cluster.mongodb.net/
+   AWS_ACCESS_KEY_ID=your_aws_access_key
+   AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+   AWS_DEFAULT_REGION=us-east-1
+   ```
 
-The project uses YAML configuration files to manage settings:
+5. **Update configuration:**
+   ```bash
+   # Edit config/config.yaml and params.yaml with your settings
+   ```
 
-- `config/config.yaml`: Main configuration for AWS services
-- `params.yaml`: Model parameters and RAG configuration
-- `schema.yaml`: Data schemas (if needed)
+## Configuration
 
-Example MongoDB configuration in `params.yaml`:
+### Main Configuration (`config/config.yaml`)
 ```yaml
+artifacts_root: artifacts
+sagemaker:
+  region: us-east-1
+  role: arn:aws:iam::account:role/SageMakerRole
+  instance_type: ml.g5.4xlarge
+```
+
+### Model Parameters (`params.yaml`)
+```yaml
+rag:
+  region: us-east-1
+  embedding:
+    embed_endpoint_name: huggingface-textembedding-gpt-j-6b-fp16
+  llm:
+    llm_endpoint_name: Llama-2-7b-fp16
+    parameters:
+      max_new_tokens: 500
+      temperature: 0.1
+
 mongo:
   DB_NAME: "langchain_test_db"
   COLLECTION_NAME: "langchain_test_vectorstores"
   ATLAS_VECTOR_SEARCH_INDEX_NAME: "langchain-test-index-vectorstores"
-  datafolder: "VectorSage/data"
   embedding_dimenssion: 4096
   k: 2
-  score: .2
+  score: 0.2
 ```
 
-## 🏃‍♂️ Running the Application
+## Deployment
 
-### Deploy Models to SageMaker
-
-First, deploy the necessary models to SageMaker:
+### 1. Deploy SageMaker Models
 
 ```bash
+# Deploy embedding model
+python -c "
+from VectorSage.config.configuration import ConfigurationManager
+from VectorSage.cloud.embeddingmodel import DeployEmbeddingModel
+
+config = ConfigurationManager()
+sagemaker_config = config.get_sagemakersession_config()
+embeddings_config = config.get_embeddings_config()
+
+embedding_deploy = DeployEmbeddingModel(sagemaker_config, embeddings_config)
+embedding_deploy.deploy_embedding_model()
+"
+```
+
+```bash
+# Deploy text generation model
+python -c "
+from VectorSage.config.configuration import ConfigurationManager
+from VectorSage.cloud.textgenerationmodel import DeployTextGenerationModel
+
+config = ConfigurationManager()
+sagemaker_config = config.get_sagemakersession_config()
+textgen_config = config.get_textgeneration_config()
+
+text_deploy = DeployTextGenerationModel(sagemaker_config, textgen_config)
+text_deploy.creat_and_deploy_model()
+"
+```
+
+### 2. Initialize Vector Store
+
+```bash
+# Process documents and create vector store
 python main.py
 ```
 
-This script will:
-1. Set up the project structure
-2. Deploy the embedding model (GPT-J-6B)
-3. Deploy the text generation model (Llama-2-7b)
-4. Create and configure the MongoDB vector store
-5. Initialize the RAG pipeline
+### 3. Run Applications
 
-### Run the Flask Web App
-
+**Flask API:**
 ```bash
 python app.py
 ```
+Access at `http://localhost:5000`
 
-The Flask application will be available at http://localhost:5000
-
-### Run the Streamlit Interface
-
+**Streamlit Interface:**
 ```bash
-cd VectorSage
 streamlit run main.py
 ```
+Access at `http://localhost:8501`
 
-The Streamlit application will be available at http://localhost:8501
+## Docker Deployment
 
-## 📁 Project Structure
-
-```
-VectorSage/
-├── .github/               # GitHub workflows and actions
-├── config/                # Configuration files
-│   └── config.yaml        # Main AWS configuration
-├── Data/                  # Data storage directory
-├── research/              # Research notebooks
-├── VectorSage/      # Main module
-│   ├── cloud/             # AWS and MongoDB integration
-│   ├── components/        # Reusable components
-│   ├── config/            # Configuration management
-│   ├── constants/         # Project constants
-│   ├── entity/            # Data classes and models
-│   ├── logging/           # Logging setup
-│   ├── utils/             # Utility functions
-│   └── __init__.py        # Package initialization
-├── app.py                 # Flask application
-├── main.py                # Main entry script
-├── params.yaml            # Model and RAG parameters
-├── requirements.txt       # Project dependencies
-├── schema.yaml            # Data schemas
-└── setup.py               # Package setup file
+### Single Container
+```bash
+docker build -t vectorsage .
+docker run -p 5000:5000 --env-file embedding.env vectorsage
 ```
 
-![Architecture Diagram](docs/images/config.png)
+### Multi-Container with Docker Compose
+```bash
+docker-compose up -d
+```
 
-## 🧩 Core ComponentsC
+This starts:
+- Flask application (port 5000)
+- Streamlit application (port 8501)
+- MongoDB instance (port 27017)
 
-### 1. Embedding Model
+## API Reference
 
-The system uses Hugging Face's GPT-J-6B model for generating text embeddings. This model is deployed on an ml.g5.4xlarge instance in SageMaker.
+### Flask Endpoints
+
+#### Query Endpoint
+```bash
+POST /
+Content-Type: application/json
+
+{
+  "question": "What are the key features of this system?"
+}
+```
+
+#### Health Check
+```bash
+GET /health
+```
+
+### Programmatic Usage
 
 ```python
-embedding_model_deploy = DeployEmbeddingModel(sagemaker_config, embeddings_config)
-embedding_model_deploy.deploy_embedding_model()
-```
+from VectorSage.config.configuration import ConfigurationManager
+from VectorSage.cloud.ragendpoints import RAGEndPoints
+from VectorSage.cloud.mongo_connecton import mongo_setup
 
-### 2. Text Generation Model
+# Initialize configuration
+config = ConfigurationManager()
+rag_config = config.get_rag_config()
+mongo_config = config.get_mongo_config()
 
-For text generation, we use the Llama-2-7b-fp16 model deployed on an ml.g5.12xlarge instance:
+# Create RAG endpoints
+rag_endpoints = RAGEndPoints(rag_config)
+embeddings_endpoint, llm_endpoint = rag_endpoints.create_rag_endpoints()
 
-```python
-text_model_deploy = DeployTextGenerationModel(sagemaker_config, textgeneration_config)
-text_model_deploy.creat_and_deploy_model()
-```
-
-### 3. MongoDB Vector Store
-
-Documents are embedded and stored in MongoDB Atlas:
-
-```python
+# Setup retriever
 retriever = mongo_setup(embeddings_endpoint, mongo_config)
+
+# Process query
+response = retrieval_chain.invoke({"input": "Your question here"})
 ```
 
-### 4. RAG Pipeline
+## Performance Optimization
 
-The RAG pipeline uses LangChain to connect the embedded query with relevant documents and the LLM:
+### SageMaker Endpoints
+- **Auto-scaling**: Configured for variable workloads
+- **Instance Types**: Optimized for GPU-accelerated inference
+- **Batch Processing**: Efficient handling of multiple requests
 
+### MongoDB Atlas
+- **Vector Indexing**: Optimized for 4096-dimensional embeddings
+- **Sharding**: Horizontal scaling for large datasets
+- **Caching**: Intelligent query result caching
+
+### Application Layer
+- **Connection Pooling**: Efficient database connection management
+- **Async Processing**: Non-blocking request handling
+- **Error Handling**: Comprehensive error recovery and logging
+
+## Monitoring and Observability
+
+### CloudWatch Integration
+- SageMaker endpoint metrics
+- Application performance monitoring
+- Custom business metrics
+
+### Application Logging
 ```python
-prompt = ChatPromptTemplate.from_template("""
-Role: You are my assistant, please help me with responses based on context
-<context>
-{context}
-</context>
-Question: {input}""")
+from VectorSage.logging.logger import logger
 
-document_chain = create_stuff_documents_chain(sm_llm_endpoint, prompt)
-retrieval_chain = create_retrieval_chain(retriever, document_chain)
+logger.info("Processing user query")
+logger.error("Model inference failed", extra={"error": str(e)})
 ```
 
-## 📚 Use Cases
+### Health Checks
+- SageMaker endpoint health
+- MongoDB connection status
+- Application readiness probes
 
-The system is particularly well-suited for:
+## Security Best Practices
 
-- **Domain-specific QA systems**: Build knowledge bases from specialized documents
-- **Drug and chemical information retrieval**: The demonstration includes a drug reaction trends analysis
-- **Corporate document search**: Query internal documentation with natural language
-- **Research assistance**: Find relevant information across large document collections
+### AWS Security
+- IAM roles with least privilege
+- VPC endpoints for secure communication
+- Encryption at rest and in transit
 
-## 🔄 Workflow
+### MongoDB Security
+- Connection string encryption
+- Network access control
+- Authentication and authorization
 
-1. Documents are loaded from PDF files
-2. Text is split into chunks and embedded using the SageMaker embedding endpoint
-3. Embeddings are stored in MongoDB Atlas
-4. User queries are embedded using the same model
-5. Similar documents are retrieved from MongoDB using vector similarity
-6. The LLM generates a context-aware response using the original query and retrieved documents
+### Application Security
+- Input validation and sanitization
+- API rate limiting
+- Security headers and CORS configuration
 
-## 🔐 Security
+## Cost Optimization
 
-- IAM roles are used for secure AWS service access
-- MongoDB connection string should be stored as an environment variable
-- SageMaker endpoints are protected by AWS authentication
+### SageMaker Costs
+- Use spot instances for development
+- Implement auto-scaling policies
+- Monitor and optimize instance usage
 
-## 🤝 Contributing
+### MongoDB Atlas Costs
+- Configure appropriate cluster tiers
+- Implement data retention policies
+- Monitor storage and compute usage
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Troubleshooting
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Common Issues
 
-## 📄 License
+1. **SageMaker Endpoint Deployment Failures**
+   ```bash
+   # Check CloudWatch logs
+   aws logs describe-log-groups --log-group-name-prefix /aws/sagemaker
+   ```
+
+2. **MongoDB Connection Issues**
+   ```bash
+   # Test connection
+   python -c "
+   from VectorSage.cloud.mongo_connecton import mongo_setup
+   # Check connection logs
+   "
+   ```
+
+3. **Memory Issues**
+   ```bash
+   # Monitor memory usage
+   docker stats
+   ```
+
+### Debug Mode
+```bash
+export LOG_LEVEL=DEBUG
+python app.py
+```
+
+## Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Write comprehensive tests**
+4. **Ensure code quality** (run linters and tests)
+5. **Update documentation**
+6. **Commit changes** (`git commit -m 'Add amazing feature'`)
+7. **Push to branch** (`git push origin feature/amazing-feature`)
+8. **Open Pull Request**
+
+### Development Setup
+```bash
+# Install development dependencies
+pip install -r requirements-dev.txt
+
+# Run tests
+pytest tests/
+
+# Run linters
+flake8 VectorSage/
+black VectorSage/
+```
+
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 📞 Contact
+## Author
 
-MahammadRafi - mrafi@uw.edu
+**MahammadRafi**
+- GitHub: [@MahammadRafi06](https://github.com/MahammadRafi06)
+- Email: mrafi@uw.edu
 
-Project Link: [https://github.com/MahammadRafi06/VectorSage](https://github.com/MahammadRafi06/VectorSage)
+## Acknowledgments
 
-## 🙏 Acknowledgements
+- **AWS SageMaker** team for managed ML infrastructure
+- **MongoDB Atlas** for vector search capabilities
+- **LangChain** for RAG framework
+- **Hugging Face** for transformer models
+- **Open source AI community** for continuous innovation
 
-- [LangChain](https://github.com/hwchase17/langchain)
-- [MongoDB Atlas](https://www.mongodb.com/atlas/database)
-- [AWS SageMaker](https://aws.amazon.com/sagemaker/)
-- [Hugging Face](https://huggingface.co/)
-- [Meta AI (for Llama-2)](https://ai.meta.com/)
+## Support
+
+For questions, issues, or support:
+- Open an issue on GitHub
+- Check the comprehensive documentation
+- Review existing discussions
+- Contact the maintainer
+
+## Roadmap
+
+- [ ] Multi-modal document processing (images, tables)
+- [ ] Advanced RAG techniques (hybrid search, reranking)
+- [ ] Enterprise SSO integration
+- [ ] Real-time document ingestion
+- [ ] Multi-language support
+- [ ] Advanced analytics dashboard
+- [ ] Cost optimization tools
+- [ ] Performance benchmarking suite
