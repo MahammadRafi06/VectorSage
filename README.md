@@ -1,10 +1,10 @@
-# VectorSage: Production-Ready RAG System on AWS SageMaker
+# vector-sage: Production-Ready RAG System on AWS SageMaker
 
 A comprehensive Retrieval-Augmented Generation (RAG) platform built on AWS SageMaker with MongoDB Atlas integration, designed for enterprise-scale document intelligence and question answering.
 
 ## Overview
 
-VectorSage demonstrates a complete production-ready RAG implementation that leverages AWS SageMaker for model deployment, MongoDB Atlas for vector storage, and LangChain for orchestration. The system provides both Flask and Streamlit interfaces for versatile user interaction while maintaining enterprise-grade scalability and security.
+vector-sage demonstrates a complete production-ready RAG implementation that leverages AWS SageMaker for model deployment, MongoDB Atlas for vector storage, and LangChain for orchestration. The system provides both Flask and Streamlit interfaces for versatile user interaction while maintaining enterprise-grade scalability and security.
 
 ## Key Features
 
@@ -48,7 +48,7 @@ Documents → Embedding Model → Vector Store → Retrieval → LLM → Respons
 ## Project Structure
 
 ```
-VectorSage/
+vector-sage/
 ├── VectorSage/                 # Main package
 │   ├── cloud/                  # AWS and MongoDB integration
 │   │   ├── embeddingmodel.py   # SageMaker embedding deployment
@@ -91,8 +91,8 @@ VectorSage/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/MahammadRafi06/VectorSage.git
-   cd VectorSage
+   git clone https://github.com/MahammadRafi06/vector-sage.git
+   cd vector-sage
    ```
 
 2. **Create virtual environment:**
@@ -216,8 +216,8 @@ Access at `http://localhost:8501`
 
 ### Single Container
 ```bash
-docker build -t vectorsage .
-docker run -p 5000:5000 --env-file embedding.env vectorsage
+docker build -t vector-sage .
+docker run -p 5000:5000 --env-file embedding.env vector-sage
 ```
 
 ### Multi-Container with Docker Compose
