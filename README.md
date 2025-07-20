@@ -1,10 +1,10 @@
-# vector-sage: Production-Ready RAG System on AWS SageMaker
+# EMR-RAG: Production-Ready RAG System on AWS SageMaker
 
 A comprehensive Retrieval-Augmented Generation (RAG) platform built on AWS SageMaker with MongoDB Atlas integration, designed for enterprise-scale document intelligence and question answering.
 
 ## Overview
 
-vector-sage demonstrates a complete production-ready RAG implementation that leverages AWS SageMaker for model deployment, MongoDB Atlas for vector storage, and LangChain for orchestration. The system provides both Flask and Streamlit interfaces for versatile user interaction while maintaining enterprise-grade scalability and security.
+EMR-RAG demonstrates a complete production-ready RAG implementation that leverages AWS SageMaker for model deployment, MongoDB Atlas for vector storage, and LangChain for orchestration. The system provides both Flask and Streamlit interfaces for versatile user interaction while maintaining enterprise-grade scalability and security.
 
 ## Key Features
 
